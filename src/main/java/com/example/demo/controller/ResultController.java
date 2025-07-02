@@ -32,8 +32,8 @@ public class ResultController {
             chartData.setOverallIPercent(20.0);
             chartData.setOverallSPercent(35.0);
             chartData.setOverallNPercent(65.0);
-            chartData.setOverallTPercent(50.0);
-            chartData.setOverallFPercent(50.0);
+            chartData.setOverallTPercent(51.0);
+            chartData.setOverallFPercent(49.0);
             chartData.setOverallJPercent(40.0);
             chartData.setOverallPPercent(60.0);
 
@@ -43,6 +43,10 @@ public class ResultController {
         // ここで初めてサービス呼び出し
         Personality p = personalityService.getByType(resultType);
 
+        String baseName = p.getImageName();         // 例: "ENFP" または "ENFP.png"
+        baseName = baseName.replaceAll("\\.png$", ""); 
+        model.addAttribute("imageName", baseName + ".jpg");
+        
         model.addAttribute("chartData",   chartData);
         model.addAttribute("resultType",  resultType);
         model.addAttribute("personality", p);

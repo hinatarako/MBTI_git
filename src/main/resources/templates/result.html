@@ -3,12 +3,50 @@
 <head>
   <meta charset="UTF-8"/>
   <title th:text="'あなたのMBTIは ' + ${personality.name} + ' です'">診断結果</title>
+
+  <!-- ① Thymeleaf 変数を JavaScript グローバル変数として定義 -->
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    // 結果タイプ
+    const mbtiResult  = /*[[${resultType}]]*/ 'UNKNOWN';
+
+    // 棒グラフの軸ラベル
+    const mbtiLabels  = ['E vs I','S vs N','T vs F','J vs P'];
+
+    // 各軸の「前半」「後半」パーセント
+    const mbtiFirst   = [
+      /*[[${chartData.overallEPercent}]]*/,
+      /*[[${chartData.overallSPercent}]]*/,
+      /*[[${chartData.overallTPercent}]]*/,
+      /*[[${chartData.overallJPercent}]]*/
+    ];
+    const mbtiSecond  = [
+      /*[[${chartData.overallIPercent}]]*/,
+      /*[[${chartData.overallNPercent}]]*/,
+      /*[[${chartData.overallFPercent}]]*/,
+      /*[[${chartData.overallPPercent}]]*/
+    ];
+
+    // 結果タイプごとのテーマカラー
+    const colorMap = {
+      'INTJ':'#d1c4e9','INTP':'#d1c4e9','ENTJ':'#d1c4e9','ENTP':'#d1c4e9',
+      'ISTJ':'#b3e5fc','ISFJ':'#b3e5fc','ESTJ':'#b3e5fc','ESFJ':'#b3e5fc',
+      'INFJ':'#dcedc8','INFP':'#dcedc8','ENFJ':'#dcedc8','ENFP':'#dcedc8',
+      'ISTP':'#fff9c4','ISFP':'#fff9c4','ESTP':'#fff9c4','ESFP':'#fff9c4'
+    };
+    const themeColor = colorMap[mbtiResult] || '#cccccc';
+    const grayColor  = 'rgba(200,200,200,0.5)';
+    /*]]>*/
+  </script>
+
   <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 
-  <!-- Chart.js 本体 -->
+  <!-- ② Chart.js 本体 ＋ datalabels プラグイン -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-  <!-- datalabels プラグイン -->
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+  <!-- ③ 描画ロジック -->
+  <script th:src="@{/js/result-chart.js}"></script>
 </head>
 <body th:class="${resultType}">
   <div class="result-container">
@@ -17,47 +55,17 @@
       あなたのMBTIは『運動家』（ENFP）です
     </h1>
 
-    <img th:src="@{/mbti/images/{img}(img=${personality.imageName})}"
-         th:alt="${personality.name}"
-         class="result-image"/>
+	<img class="result-image"
+	     th:src="@{/mbti/images/{img}(img=${imageName})}"
+	     th:alt="${personality.name}" />
 
-    <canvas id="mbtiChart" width="700" height="300"></canvas>
-
-    <!-- グローバル JS 変数定義（必ず result-chart.js の前） -->
-    <script th:inline="javascript">
-      /*<![CDATA[*/
-      // ラベル
-      var mbtiLabels = ['E vs I','S vs N','T vs F','J vs P'];
-      // データ（大きい方・小さい方）
-      var mbtiMax = [
-        Math.max([[${chartData.overallEPercent}]], [[${chartData.overallIPercent}]]),
-        Math.max([[${chartData.overallSPercent}]], [[${chartData.overallNPercent}]]),
-        Math.max([[${chartData.overallTPercent}]], [[${chartData.overallFPercent}]]),
-        Math.max([[${chartData.overallJPercent}]], [[${chartData.overallPPercent}]])
-      ];
-      var mbtiMin = [
-        Math.min([[${chartData.overallEPercent}]], [[${chartData.overallIPercent}]]),
-        Math.min([[${chartData.overallSPercent}]], [[${chartData.overallNPercent}]]),
-        Math.min([[${chartData.overallTPercent}]], [[${chartData.overallFPercent}]]),
-        Math.min([[${chartData.overallJPercent}]], [[${chartData.overallPPercent}]])
-      ];
-      // タイプ別カラー
-      var colorMap = {
-        'INTJ':'#d1c4e9','INTP':'#d1c4e9','ENTJ':'#d1c4e9','ENTP':'#d1c4e9',
-        'ISTJ':'#b3e5fc','ISFJ':'#b3e5fc','ESTJ':'#b3e5fc','ESFJ':'#b3e5fc',
-        'INFJ':'#dcedc8','INFP':'#dcedc8','ENFJ':'#dcedc8','ENFP':'#dcedc8',
-        'ISTP':'#fff9c4','ISFP':'#fff9c4','ESTP':'#fff9c4','ESFP':'#fff9c4'
-      };
-      var barColor = colorMap['[[${resultType}]]'];
-      /*]]>*/
-    </script>
-
-    <!-- 描画スクリプト -->
-    <script th:src="@{/js/result-chart.js}"></script>
+    <!-- 描画対象の canvas -->
+    <canvas id="mbtiChart" width="600" height="400"></canvas>
 
     <div class="description" th:text="${personality.description}">
       ENFP は好奇心旺盛で社交的。…
     </div>
+
     <div class="restart">
       <a th:href="@{/start}">
         <button class="start-button">もう一度診断する</button>

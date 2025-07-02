@@ -13,6 +13,6 @@ public class Personality {
     @Id
     private String type;       // "ENFP" など
     private String name;       // "運動家" など
-    private String imageName;  // "ENFP.png"
+    private String imageName;  // "ENFP.jpg"
     private String description;// 長い説明文
 }

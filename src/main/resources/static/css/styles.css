@@ -67,7 +67,12 @@
   background-color: #4a148c;
 }
 .result-container { max-width: 700px; margin: 0 auto; padding: 40px; font-family: sans-serif; }
-.result-image { display: block; margin: 0 auto 20px; max-width: 200px; }
+.result-image {
+  display: block;
+  margin: 0 auto 20px;
+  width: 400px;     /* 横幅を固定 */
+  height: auto;     /* 高さは自動調整 */
+}
 .bars .bar-line { display: flex; align-items: center; margin: 8px 0; }
 .bars .label  { width: 80px; font-weight: bold; }
 .bars .bar    { flex: 1; background: #eee; height: 12px; border-radius: 6px; overflow: hidden; margin: 0 10px; }

@@ -1,70 +1,68 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const pages = document.querySelectorAll('.question-page');
-  pages.forEach(initPage);
-});
+window.addEventListener('DOMContentLoaded', () => {
+  Chart.register(ChartDataLabels);
 
-function initPage(page) {
-  const buttons = page.querySelectorAll('.circular-button');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      selectAnswer(btn);
-      updateNavButtons(page);
-    });
+  // グローバル変数（既存のまま）
+  const labels  = mbtiLabels;  // 例: ['E vs I', 'S vs N', 'T vs F', 'J vs P']
+  const dataMax = mbtiMax;
+  const dataMin = mbtiMin;
+
+  // 対立軸ごとの色マップ
+  const axisColor = {
+    E: '#c6a5e0',  // INTJ/INTP/ENTJ/ENTP 系 → 淡い紫
+    I: '#c6a5e0',
+    S: '#a3d5f7',  // ISTJ/ISFJ/ESTJ/ESFJ 系 → 薄い水色
+    N: '#a3d5f7',
+    T: '#c2e7c3',  // INFJ/INFP/ENFJ/ENFP 系 → 薄い黄緑
+    F: '#c2e7c3',
+    J: '#f9e7ab',  // ISTP/ISFP/ESTP/ESFP 系 → 薄い黄色
+    P: '#f9e7ab'
+  };
+
+  // ラベルから対立軸の先頭文字・末尾文字を切り出し、色を取得
+  const maxColors = labels.map(label => {
+    const first = label.split(' vs ')[0];  // 'E' など
+    return axisColor[first] || '#cccccc';
   });
-}
-
-function selectAnswer(btn) {
-  const container = btn.parentElement;
-  // 同じ質問の他ボタンは解除
-  container.querySelectorAll('.circular-button').forEach(b => {
-    b.classList.remove('selected');
+  const minColors = labels.map(label => {
+    const second = label.split(' vs ')[1]; // 'I' など
+    return axisColor[second] || 'rgba(200,200,200,0.5)';
   });
-  // 選択ボタンにマーク
-  btn.classList.add('selected');
 
-  // hidden input を生成・更新
-  const form = document.querySelector('form');
-  const name = btn.getAttribute('data-name');
-  const value = btn.getAttribute('data-value');
-  let input = form.querySelector(`input[name="${name}"]`);
-  if (!input) {
-    input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    form.appendChild(input);
-  }
-  input.value = value;
-}
-
-function updateNavButtons(page) {
-  const questions = page.querySelectorAll('.question');
-  // 回答済み = 各 question の .selected ボタンがあるか
-  const answered = Array.from(questions).filter(q =>
-    q.querySelector('.circular-button.selected')
-  ).length;
-  const all = questions.length;
-
-  // Next ボタン
-  const next = page.querySelector('.nav-button[data-next]');
-  if (next) {
-    next.disabled = (answered < all);
-  }
-  // Submit ボタン（最終ページ）
-  const submit = page.querySelector('.submit-button');
-  if (submit) {
-    submit.disabled = (answered < all);
-  }
-}
-
-// ページ切替（Next / Back）
-document.addEventListener('click', e => {
-  if (e.target.matches('.nav-button')) {
-    const idx = parseInt(e.target.getAttribute('data-next') ?? e.target.getAttribute('data-prev'));
-    const current = document.querySelector('.question-page:not(.hidden)');
-    current.classList.add('hidden');
-    const target = document.getElementById('page' + idx);
-    target.classList.remove('hidden');
-    // 移動先のボタン状態チェック
-    updateNavButtons(target);
-  }
+  // チャート描画
+  const ctx = document.getElementById('mbtiChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        { data: dataMax, backgroundColor: maxColors, stack: 's1' },
+        { data: dataMin, backgroundColor: minColors, stack: 's1' }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        x: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%' } },
+        y: { stacked: true, ticks: { display: false }, grid: { display: false } }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${labels[ctx.dataIndex]}: ${ctx.parsed.x}%`
+          }
+        },
+        datalabels: {
+          color: '#000',
+          formatter: (value, ctx) => labels[ctx.dataIndex],
+          anchor: ctx => ctx.datasetIndex === 0 ? 'start' : 'end',
+          align:  ctx => ctx.datasetIndex === 0 ? 'end' : 'start',
+          padding: 4, clamp: true,
+          font: { size: 12, weight: 'bold' }
+        }
+      }
+    }
+  });
 });
