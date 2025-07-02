@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>MBTI診断 質問ページ</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+  <script defer th:src="@{/js/question.js}"></script>
+</head>
+<body>
+  <div id="question-container">
+    <form method="post" th:action="@{/result}">
+
+      <!-- Controller から渡された pages（List<List<Question>>） -->
+      <div th:each="page, pageStat : ${pages}"
+           th:id="'page' + ${pageStat.index}"
+           class="question-page"
+           th:classappend="${pageStat.index > 0} ? ' hidden' : ''">
+
+        <!-- 各質問 -->
+        <div th:each="q, iterStat : ${page}"
+             class="question">
+          <label th:text="|${(pageStat.index * 25) + iterStat.index + 1}. ${q.questionText}|"></label>
+          <div class="answers">
+            <button type="button"
+                    class="circular-button"
+                    th:each="num : ${#numbers.sequence(1,5)}"
+                    th:text="${num}"
+                    th:attr="data-name=${'q' + ((pageStat.index*25) + iterStat.index)}, 
+                             data-value=${num}">
+            </button>
+          </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="navigation">
+          <!-- Back はインデックス -1 -->
+          <button type="button"
+                  class="nav-button"
+                  th:if="${pageStat.index > 0}"
+                  th:attr="data-prev=${pageStat.index - 1}">
+            Back
+          </button>
+
+          <!-- Next はインデックス +1 -->
+          <button type="button"
+                  class="nav-button"
+                  th:if="${pageStat.index < pages.size() - 1}"
+                  th:attr="data-next=${pageStat.index + 1}"
+                  disabled>
+            Next
+          </button>
+
+          <!-- 最終ページのみ診断へ進む -->
+          <button type="submit"
+                  class="submit-button"
+                  th:if="${pageStat.index == pages.size() - 1}"
+                  disabled>
+            診断へ進む
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MBTI診断 - スタート</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="start-container" style="text-align: center; padding: 60px;">
+        <h1>MBTI診断</h1>
+        <p>あなたのMBTIタイプを診断します。</p>
+        <p>全100問の簡単な質問に、5段階で答えてください。</p>
+        <p>1 は「まったくそう思わない」、5 は「とてもそう思う」に近い意味です。</p>
+        <p>直感でお答えください。あまり深く考えなくても大丈夫！</p>
+
+        <!-- スタートボタン。質問ページへ遷移 -->
+        <a href="/question">
+            <button class="start-button" style="padding: 12px 30px; font-size: 18px; margin-top: 30px;">
+                Start
+            </button>
+        </a>
+    </div>
+</body>
+</html>

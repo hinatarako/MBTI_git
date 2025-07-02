@@ -1,0 +1,207 @@
+@charset "UTF-8";
+/* 質問ページ全体のパディング */
+.question-page { 
+  padding: 20px; 
+}
+
+/* .hidden クラスはdisplay:noneで非表示にする */
+.hidden { 
+  display: none; 
+}
+
+/* 丸いボタンのスタイル（SwingのCircularButtonに対応） */
+.circular-button {
+  width: 30px;             /* 幅30px */
+  height: 30px;            /* 高さ30px */
+  border-radius: 50%;      /* 円形にする */
+  background-color: lightgray; /* 初期背景色 */
+  color: black;            /* テキスト色 */
+  font-family: "Meiryo UI", sans-serif; /* 使用フォント */
+  border: none;            /* 枠線なし */
+  margin: 4px;             /* 隙間 */
+  cursor: pointer;         /* クリック時のカーソル変更 */
+}
+
+/* 選択状態のボタンは水色に変更 */
+.circular-button.selected {
+  background-color: #87CEFA;
+}
+
+/* ナビゲーション部分のスタイル */
+.navigation {
+  margin-top: 20px;        /* 上部余白 */
+  text-align: center;      /* 中央寄せ */
+}
+
+/* ナビゲーションボタンおよび送信ボタン */
+.nav-button, .submit-button {
+  font-size: 16px;
+  padding: 10px 20px;
+  margin: 5px;
+}
+
+/* start.html 用のコンテナ中央寄せ */
+.start-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  text-align: center;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: #333;
+}
+
+/* Start ボタンのスタイル */
+.start-button {
+  display: inline-block;
+  background-color: #6a1b9a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.start-button:hover {
+  background-color: #4a148c;
+}
+.result-container { max-width: 700px; margin: 0 auto; padding: 40px; font-family: sans-serif; }
+.result-image { display: block; margin: 0 auto 20px; max-width: 200px; }
+.bars .bar-line { display: flex; align-items: center; margin: 8px 0; }
+.bars .label  { width: 80px; font-weight: bold; }
+.bars .bar    { flex: 1; background: #eee; height: 12px; border-radius: 6px; overflow: hidden; margin: 0 10px; }
+.bars .bar-fill { height: 100%; }
+.bars .bar-fill.e { background: #ff8a65; }
+.bars .bar-fill.s { background: #4fc3f7; }
+.bars .bar-fill.t { background: #aed581; }
+.bars .bar-fill.j { background: #ba68c8; }
+.bars .value  { width: 50px; text-align: right; font-size: 0.9em; }
+.description  { margin-top: 30px; line-height: 1.6; }
+/* === QUESTION PAGE === */
+.question {
+  margin-bottom: 2cm;
+}
+.question label {
+  display: block;
+  margin-left: 3cm;
+  text-align: left;
+  font-size: 1.1em;
+}
+.answers {
+  display: flex;
+  justify-content: center;
+  gap: 1cm;
+  margin-top: 0.5cm;
+}
+.circular-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: lightgray;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+}
+.circular-button.selected {
+  background-color: #b3e5fc; /* 淡い水色 */
+}
+.navigation {
+  text-align: center;
+  margin-top: 20px;
+}
+.nav-button,
+.submit-button {
+  font-size: 1em;
+  padding: 8px 20px;
+  margin: 0 0.5cm;
+}
+.nav-button[disabled],
+.submit-button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* hidden */
+.hidden {
+  display: none;
+}
+/* === RESULT PAGE：バー共通設定 === */
+/* タイトル中央寄せ */
+.result-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* バー共通 */
+.bars .bar-line {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+}
+.bars .label {
+  width: 30px;
+  font-weight: bold;
+}
+.bars .bar {
+  position: relative;
+  flex: 1;
+  height: 16px;
+  background: #eee;
+  border-radius: 8px;
+  margin: 0 10px;
+  overflow: visible;
+}
+/* 塗りつぶし */
+.bars .bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: #ccc; /* デフォルト */
+  border-radius: 8px;
+}
+/* ％テキスト */
+.bars .bar-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+.bars .bar-text.left  { left: 4px;  }
+.bars .bar-text.right { right: 4px; }
+
+/* ②MBTIタイプごとのバー色 */
+body.INTJ  .bar-fill,
+body.INTP  .bar-fill,
+body.ENTJ  .bar-fill,
+body.ENTP  .bar-fill { background-color: #d1c4e9; } /* 淡い紫 */
+
+body.ISTJ  .bar-fill,
+body.ISFJ  .bar-fill,
+body.ESTJ  .bar-fill,
+body.ESFJ  .bar-fill { background-color: #b3e5fc; } /* 薄い水色 */
+
+body.INFJ  .bar-fill,
+body.INFP  .bar-fill,
+body.ENFJ  .bar-fill,
+body.ENFP  .bar-fill { background-color: #dcedc8; } /* 淡い黄緑 */
+
+body.ISTP  .bar-fill,
+body.ISFP  .bar-fill,
+body.ESTP  .bar-fill,
+body.ESFP  .bar-fill { background-color: #fff9c4; } /* 淡い黄色 */
+
+/* 再診断ボタンの位置調整 */
+.restart {
+  text-align: center;
+  margin-top: 30px;
+}
+#mbtiChart {
+  /* HTML 側で width=700 height=300 を書いていても、
+     CSS で max-height を指定しておくと安心 */
+  max-width: 700px;
+  max-height: 300px;
+  margin: 0 auto;
+}
