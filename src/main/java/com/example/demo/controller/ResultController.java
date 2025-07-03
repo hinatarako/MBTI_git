@@ -26,19 +26,19 @@ public class ResultController {
         String resultType         = (String)    model.asMap().get("resultType");
 
         // resultType が null または 空文字 のときにもダミーを入れる
-        if (chartData == null || resultType == null || resultType.isBlank()) {
-            chartData  = new DiagnosisResult();
-            chartData.setOverallEPercent(80.0);
-            chartData.setOverallIPercent(20.0);
-            chartData.setOverallSPercent(35.0);
-            chartData.setOverallNPercent(65.0);
-            chartData.setOverallTPercent(51.0);
-            chartData.setOverallFPercent(49.0);
-            chartData.setOverallJPercent(40.0);
-            chartData.setOverallPPercent(60.0);
-
-            resultType = "ENFP";
-        }
+//        if (chartData == null || resultType == null || resultType.isBlank()) {
+//            chartData  = new DiagnosisResult();
+//            chartData.setOverallEPercent(80.0);
+//            chartData.setOverallIPercent(20.0);
+//            chartData.setOverallSPercent(35.0);
+//            chartData.setOverallNPercent(65.0);
+//            chartData.setOverallTPercent(51.0);
+//            chartData.setOverallFPercent(49.0);
+//            chartData.setOverallJPercent(40.0);
+//            chartData.setOverallPPercent(60.0);
+//
+//            resultType = "ENFP";
+//        }
 
         // ここで初めてサービス呼び出し
         Personality p = personalityService.getByType(resultType);
